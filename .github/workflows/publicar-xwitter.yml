@@ -17,18 +17,23 @@ jobs:
       - name: Descompactar codigo-fonte e documentos
         run: |
           cat xwitter/.release/part-* | base64 --decode | tar -xJ -C xwitter
-          cp xwitter/.github/workflows/ci.yml .github/workflows/ci.yml
           rm -rf xwitter/.release
       - name: Publicar arquivos do projeto
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add xwitter .github/workflows/ci.yml
+          git add xwitter
           git commit -m "feat: publica aplicacao Xwitter completa" || true
           git push
       - name: Instalar dependencias
         working-directory: xwitter
         run: npm install
+      - name: Salvar lockfile gerado
+        if: success()
+        run: |
+          git add xwitter/package-lock.json
+          git commit -m "build: registra versoes npm" || true
+          git push
       - name: Checar sintaxe
         working-directory: xwitter
         run: npm run check
