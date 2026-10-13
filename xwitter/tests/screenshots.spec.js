@@ -1,0 +1,38 @@
+import {test,expect} from '@playwright/test';
+import fs from 'node:fs';
+const dir='evidence/screenshots';
+async function photo(page,name){await page.screenshot({path:`${dir}/${name}.png`,fullPage:true,animations:'disabled'});}
+test('capturas das páginas em desktop, mobile e dois temas',async({page})=>{
+  fs.mkdirSync(dir,{recursive:true});
+  await page.goto('/');
+  await expect(page.getByRole('heading',{name:/Suas palavras criam/})).toBeVisible();
+  await photo(page,'01-apresentacao-desktop-escuro');
+  await page.goto('/login');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await photo(page,'02-login-reducao-movimento');
+  await page.getByLabel('E-mail').fill('ana@exemplo.test');
+  await page.getByLabel('Senha').fill('Senha-Exemplo-Ana-2026!');
+  await page.getByRole('button',{name:'Entrar'}).click();
+  await expect(page).toHaveURL(/\/feed/);
+  await photo(page,'03-feed-desktop-escuro');
+  await page.goto('/publicacao/1');
+  await photo(page,'04-conversa');
+  await page.goto('/perfil/ana');
+  await photo(page,'05-perfil');
+  await page.goto('/explorar?q=web');
+  await photo(page,'06-explorar');
+  await page.goto('/atividade');
+  await photo(page,'07-atividade-d3');
+  await page.goto('/feed');
+  await page.getByRole('button',{name:'Alternar tema'}).click();
+  await expect(page.locator('html')).toHaveAttribute('data-bs-theme','light');
+  await photo(page,'08-feed-desktop-claro');
+  await page.setViewportSize({width:390,height:844});
+  await photo(page,'09-feed-smartphone-claro');
+  await page.getByRole('button',{name:'Alternar tema'}).click();
+  await photo(page,'10-feed-smartphone-escuro');
+  await page.goto('/configuracoes');
+  await photo(page,'11-configuracoes-smartphone');
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+  expect(overflow).toBe(false);
+});
