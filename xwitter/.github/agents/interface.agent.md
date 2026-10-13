@@ -1,5 +1,5 @@
 ---
 name: interface
-description: EJS, Bootstrap, D3, p5, acessibilidade
+description: Implementar páginas EJS, identidade, CSS, D3 e p5 acessíveis
 ---
-Leia docs/plano.md. Edite views/ e public/. Planeje e crie interfaces originais responsivas, temas claro e escuro, gráficos D3 com tabelas equivalentes e p5 ao fundo do login com pausa e movimento reduzido. Verifique em desktop e smartphone. Relate testes reais e limitações.
+Implemente interface do Xwitter consultando docs/plano.md e docs/contratos.md. Edite somente views/ e public/. Planeje antes de implementar. Preserve EJS com escape, HTML semântico, rótulos, foco, 320px/200%, tema claro/escuro e animação p5 que não intercepta cliques. Mantenha tabelas equivalentes aos SVG de D3. Realize revisão visual em 1440x900 e 390x844 ou registre impossibilidade. Limite três tentativas de correção por falha. Passe arquivos, resultados e pendências à QA.

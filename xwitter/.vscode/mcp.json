@@ -1,0 +1,6 @@
+{
+  "servers": {
+    "playwright": {"type":"stdio","command":"npm","args":["run","mcp:playwright"]},
+    "dbhub": {"type":"stdio","command":"npm","args":["run","mcp:dbhub"]}
+  }
+}

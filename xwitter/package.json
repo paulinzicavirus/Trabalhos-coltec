@@ -1,0 +1,38 @@
+{
+  "name": "xwitter-coltec",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "seed": "node src/seed.js",
+    "test": "playwright test",
+    "mcp:playwright": "playwright-mcp --isolated --headless",
+    "mcp:dbhub": "node scripts/dbhub.js",
+    "migrate": "node src/migrate.js",
+    "test:seed": "node scripts/prepare-test.js",
+    "test:ui": "playwright test --ui",
+    "check": "node --check src/app.js && node --check src/db.js && node --check src/seed.js && node --check public/main.js && node --check public/login.js && node --check public/charts.js"
+  },
+  "dependencies": {
+    "express": "4.21.2",
+    "ejs": "3.1.10",
+    "sequelize": "6.37.7",
+    "sqlite3": "5.1.7",
+    "bcryptjs": "2.4.3",
+    "express-session": "1.18.1",
+    "connect-session-sequelize": "7.1.7",
+    "helmet": "8.0.0",
+    "express-rate-limit": "7.5.0",
+    "dotenv": "16.4.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "@playwright/mcp": "0.0.83",
+    "@bytebase/dbhub": "1.5.0"
+  }
+}
