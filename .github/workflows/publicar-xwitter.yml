@@ -1,0 +1,49 @@
+name: Publicar e verificar Xwitter
+on:
+  push:
+    paths:
+      - 'xwitter/.release/PUBLISH'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Descompactar codigo-fonte e documentos
+        run: |
+          cat xwitter/.release/part-* | base64 --decode | tar -xJ -C xwitter
+          cp xwitter/.github/workflows/ci.yml .github/workflows/ci.yml
+          rm -rf xwitter/.release
+      - name: Publicar arquivos do projeto
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add xwitter .github/workflows/ci.yml
+          git commit -m "feat: publica aplicacao Xwitter completa" || true
+          git push
+      - name: Instalar dependencias
+        working-directory: xwitter
+        run: npm install
+      - name: Checar sintaxe
+        working-directory: xwitter
+        run: npm run check
+      - name: Instalar Chromium
+        working-directory: xwitter
+        run: npx playwright install --with-deps chromium
+      - name: Playwright testes de ponta a ponta
+        working-directory: xwitter
+        run: npm test
+      - name: Salvar evidencias dos testes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-xwitter
+          path: |
+            xwitter/test-results/
+            xwitter/playwright-report/
+          if-no-files-found: ignore
