@@ -1,0 +1,47 @@
+name: Testes completos Xwitter
+on:
+  push:
+    paths:
+      - 'xwitter/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    paths:
+      - 'xwitter/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: xwitter/package-lock.json
+      - name: Instalar dependências congeladas
+        working-directory: xwitter
+        run: npm ci
+      - name: Checar sintaxe
+        working-directory: xwitter
+        run: npm run check
+      - name: Instalar navegador Chromium
+        working-directory: xwitter
+        run: npx playwright install --with-deps chromium
+      - name: Playwright E2E e capturas
+        working-directory: xwitter
+        run: npm test
+      - name: Playwright MCP e DBHub reais
+        working-directory: xwitter
+        run: npm run test:mcp
+      - name: Guardar capturas e evidências
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xwitter-evidencias
+          path: |
+            xwitter/evidence/
+            xwitter/test-results/
+            xwitter/playwright-report/
+          if-no-files-found: ignore
