@@ -16,7 +16,8 @@
     "migrate": "node src/migrate.js",
     "test:seed": "node scripts/prepare-test.js",
     "test:ui": "playwright test --ui",
-    "check": "node --check src/app.js && node --check src/db.js && node --check src/seed.js && node --check public/main.js && node --check public/login.js && node --check public/charts.js"
+    "check": "node --check src/app.js && node --check src/db.js && node --check src/seed.js && node --check public/main.js && node --check public/login.js && node --check public/charts.js",
+    "test:mcp": "node scripts/mcp-smoke.js"
   },
   "dependencies": {
     "express": "4.21.2",
